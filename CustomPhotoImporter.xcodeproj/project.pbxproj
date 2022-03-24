@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C94488BD27CCFE3300D647DE /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94488BC27CCFE3300D647DE /* Album.swift */; };
+		C94488BF27CCFE6D00D647DE /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94488BE27CCFE6D00D647DE /* Photo.swift */; };
 		C9575A8326B6A1CB003916A2 /* CustomPhotoImporterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9575A8226B6A1CB003916A2 /* CustomPhotoImporterApp.swift */; };
 		C9575A8526B6A1CB003916A2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9575A8426B6A1CB003916A2 /* ContentView.swift */; };
 		C9575A8726B6A1CD003916A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9575A8626B6A1CD003916A2 /* Assets.xcassets */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C94488BC27CCFE3300D647DE /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		C94488BE27CCFE6D00D647DE /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		C9575A7F26B6A1CB003916A2 /* CustomPhotoImporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomPhotoImporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9575A8226B6A1CB003916A2 /* CustomPhotoImporterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPhotoImporterApp.swift; sourceTree = "<group>"; };
 		C9575A8426B6A1CB003916A2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,10 +61,12 @@
 		C9575A8126B6A1CB003916A2 /* CustomPhotoImporter */ = {
 			isa = PBXGroup;
 			children = (
+				C94488BC27CCFE3300D647DE /* Album.swift */,
 				C9575A9426B6A725003916A2 /* AuthorizedView.swift */,
 				C9575A8226B6A1CB003916A2 /* CustomPhotoImporterApp.swift */,
 				C9575A8426B6A1CB003916A2 /* ContentView.swift */,
 				C9575A9626B6D5E0003916A2 /* ImportFiles.swift */,
+				C94488BE27CCFE6D00D647DE /* Photo.swift */,
 				C9575A8626B6A1CD003916A2 /* Assets.xcassets */,
 				C9575A8B26B6A1CD003916A2 /* Info.plist */,
 				C9575A8C26B6A1CD003916A2 /* CustomPhotoImporter.entitlements */,
@@ -146,10 +152,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94488BF27CCFE6D00D647DE /* Photo.swift in Sources */,
 				C9575A9526B6A725003916A2 /* AuthorizedView.swift in Sources */,
 				C9575A8526B6A1CB003916A2 /* ContentView.swift in Sources */,
 				C9575A9726B6D5E0003916A2 /* ImportFiles.swift in Sources */,
 				C9575A8326B6A1CB003916A2 /* CustomPhotoImporterApp.swift in Sources */,
+				C94488BD27CCFE3300D647DE /* Album.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

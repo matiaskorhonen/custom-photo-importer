@@ -11,7 +11,9 @@ import Foundation
 struct AuthorizedView: View {
     @State var folderURL: URL!
     @State var files: [URL] = []
+    @State var albums: [Album] = []
     @State var importFiles: ImportFiles!
+    @State var loading = false
 
     var body: some View {
         VStack {
@@ -20,20 +22,14 @@ struct AuthorizedView: View {
                 panel.allowsMultipleSelection = false
                 panel.canChooseFiles = false
                 panel.canChooseDirectories = true
+                self.loading = true
                 if panel.runModal() == .OK {
                     if let url = panel.url {
                         self.importFiles = ImportFiles(baseUrl: url)
                         self.folderURL = url
 
-                        let _ = self.importFiles.files()
-
-                        if let files = try?
-                            FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.contentTypeKey, .nameKey, .fileSizeKey], options: .skipsHiddenFiles) {
-                            self.files = files.sorted {
-                                $0.lastPathComponent < $1.lastPathComponent
-                            }
-                        }
-
+                        self.albums = self.importFiles.albums()
+                        self.loading = false
                     }
                 }
             }
@@ -41,8 +37,21 @@ struct AuthorizedView: View {
                 Text(url.absoluteString)
             }
             List {
-                ForEach(files, id: \.self) {
-                    Text($0.lastPathComponent)
+                if self.loading {
+                    Text("Loading…")
+                } else {
+                    ForEach(albums, id: \.self) { album in
+                        Section(header: Text(album.name)) {
+                            ForEach(album.photos, id: \.self) { photo in
+                                if photo.edited {
+                                    Text("\(photo.basename) - Original: \(photo.originalURL?.lastPathComponent ?? ""), Edited:  \(photo.editedURL?.lastPathComponent ?? "")")
+                                } else {
+                                    Text("\(photo.basename) - Original: \(photo.originalURL?.lastPathComponent ?? "")")
+                                }
+
+                            }
+                        }
+                    }
                 }
             }.padding()
         }.padding()
