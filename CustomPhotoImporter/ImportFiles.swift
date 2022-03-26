@@ -7,6 +7,16 @@
 
 import Foundation
 
+extension String {
+    func fileName() -> String {
+        return URL(fileURLWithPath: self).deletingPathExtension().lastPathComponent
+    }
+
+    func fileExtension() -> String {
+        return URL(fileURLWithPath: self).pathExtension
+    }
+}
+
 class ImportFiles {
     var baseUrl: URL
 
@@ -19,8 +29,6 @@ class ImportFiles {
         guard let enumerator = FileManager.default.enumerator(at: baseUrl, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles, errorHandler: nil) else { return [Album]() }
 
         var albums = [Album]()
-
-        let separators = CharacterSet(charactersIn: ".-")
 
         enumerator.forEach { file in
             guard let fileUrl = file as? URL else { return }
@@ -41,9 +49,9 @@ class ImportFiles {
                     albums.append(Album(name: parent))
                 }
 
-                let filename = fileUrl.lastPathComponent.lowercased()
-                let components = filename.components(separatedBy: separators)
-                let basename = components.first!
+                let filename = fileUrl.lastPathComponent.lowercased().fileName()
+                let fileExt = fileUrl.lastPathComponent.lowercased().fileExtension()
+                let basename = filename.replacingOccurrences(of: "-edit", with: "")
                 var index: Array<Photo>.Index;
 
                 if let photoIndex = albums[albumIndex].photos.firstIndex(where: { $0.basename == basename }) {
@@ -53,11 +61,11 @@ class ImportFiles {
                     albums[albumIndex].photos.append(Photo(basename: basename))
                 }
 
-                if !filename.contains("-edit") && !filename.contains(".tif") {
+                if !filename.contains("-edit") {
                     albums[albumIndex].photos[index].originalURL = fileUrl
                 }
 
-                if filename.contains(".dng") || filename.contains(".nef") {
+                if fileExt.contains("dng") || fileExt.contains("nef") {
                     albums[albumIndex].photos[index].originalURL = fileUrl
                 } else {
                     albums[albumIndex].photos[index].editedURL = fileUrl

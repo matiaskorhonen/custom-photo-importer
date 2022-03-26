@@ -33,7 +33,6 @@ struct ContentView: View {
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity).onAppear(perform: {
             self.authorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-
         })
     }
 }

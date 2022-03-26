@@ -14,6 +14,16 @@ struct AuthorizedView: View {
     @State var albums: [Album] = []
     @State var importFiles: ImportFiles!
     @State var loading = false
+    @State var loaded = false
+    
+    var albumsCount: Int {
+        albums.count
+    }
+    var photosCount: Int {
+        albums.reduce(0, { partialResult, album in
+            partialResult + album.photos.count
+        })
+    }
 
     var body: some View {
         VStack {
@@ -41,19 +51,32 @@ struct AuthorizedView: View {
                     Text("Loading…")
                 } else {
                     ForEach(albums, id: \.self) { album in
-                        Section(header: Text(album.name)) {
+                        Section(header: Text("\(album.name) (\(album.photos.count))")) {
                             ForEach(album.photos, id: \.self) { photo in
-                                if photo.edited {
-                                    Text("\(photo.basename) - Original: \(photo.originalURL?.lastPathComponent ?? ""), Edited:  \(photo.editedURL?.lastPathComponent ?? "")")
-                                } else {
-                                    Text("\(photo.basename) - Original: \(photo.originalURL?.lastPathComponent ?? "")")
+                                HStack {
+                                    Text("\(photo.basename):").bold()
+                                    Text("Original: \(photo.originalURL?.lastPathComponent ?? "—")")
+                                    if photo.edited {
+                                        Text("Edited:  \(photo.editedURL?.lastPathComponent ?? "")")
+                                    }
                                 }
-
                             }
                         }
                     }
                 }
             }.padding()
+            Divider()
+            HStack {
+                Text("\(albumsCount) album(s)")
+                Text("\(photosCount) photo(s)")
+                Spacer()
+                Button("Import") {
+                    print("Button tapped!")
+                    albums.forEach { album in
+                        album.importIntoPhotos()
+                    }
+                }.disabled(photosCount == 0)
+            }
         }.padding()
     }
 }
