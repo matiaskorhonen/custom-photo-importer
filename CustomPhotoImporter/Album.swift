@@ -102,47 +102,47 @@ class Album: Hashable {
             return
         }
         
-        PHPhotoLibrary.shared().performChanges {
-            // Request editing the album
-            guard let addAssetRequest = PHAssetCollectionChangeRequest(for: album) else { return }
-            
-            do {
-                let placeholders = try self.photos.map { photo -> PHObjectPlaceholder in
-                    // Request creating an asset from the image
-                    guard let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: photo.originalURL!) else {
-                        throw ImportError.init(kind: .assetError)
-                    }
-                    
-                    // Get a placeholder for the new asset
-                    guard let placeholder = creationRequest.placeholderForCreatedAsset else {
-                        throw ImportError.init(kind: .placeholderError)
-                    }
-                    
-                    if photo.edited {
-                        // Set the edited photo as an adjustment
-                        let output = PHContentEditingOutput(placeholderForCreatedAsset: placeholder)
-                        let editedData = try Data(contentsOf: photo.editedURL!)
-                        try editedData.write(to: output.renderedContentURL, options: .atomic)
-                        output.adjustmentData = PHAdjustmentData(
-                            formatIdentifier: "customImport",
-                            formatVersion: "1",
-                            data: "📸".data(using: .utf8)!
-                        )
-                        creationRequest.contentEditingOutput = output
-                    }
-
-                    return placeholder
-                }
+        do {
+            try PHPhotoLibrary.shared().performChangesAndWait {
+                // Request editing the album
+                guard let addAssetRequest = PHAssetCollectionChangeRequest(for: album) else { return }
                 
-                // Add the placeholder to the album editing request
-                addAssetRequest.addAssets(placeholders as NSArray)
-            } catch {
-                print(error)
+                do {
+                    let placeholders = try self.photos.map { photo -> PHObjectPlaceholder in
+                        // Request creating an asset from the image
+                        guard let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: photo.originalURL!) else {
+                            throw ImportError.init(kind: .assetError)
+                        }
+                        
+                        // Get a placeholder for the new asset
+                        guard let placeholder = creationRequest.placeholderForCreatedAsset else {
+                            throw ImportError.init(kind: .placeholderError)
+                        }
+                        
+                        if photo.edited {
+                            // Set the edited photo as an adjustment
+                            let output = PHContentEditingOutput(placeholderForCreatedAsset: placeholder)
+                            let editedData = try Data(contentsOf: photo.editedURL!)
+                            try editedData.write(to: output.renderedContentURL, options: .atomic)
+                            output.adjustmentData = PHAdjustmentData(
+                                formatIdentifier: "customImport",
+                                formatVersion: "1",
+                                data: "Imported 📸".data(using: .utf8)!
+                            )
+                            creationRequest.contentEditingOutput = output
+                        }
+
+                        return placeholder
+                    }
+                    
+                    // Add the placeholder to the album editing request
+                    addAssetRequest.addAssets(placeholders as NSArray)
+                } catch {
+                    print(error)
+                }
             }
-        } completionHandler: { success, error in
-            if !success, let error = error {
-                print("error creating asset: \(error.localizedDescription)")
-            }
+        } catch {
+            print("Error importing photos for album \(name): \(error)")
         }
     }
 }

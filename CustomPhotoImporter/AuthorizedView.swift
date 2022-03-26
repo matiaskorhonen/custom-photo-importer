@@ -14,7 +14,7 @@ struct AuthorizedView: View {
     @State var albums: [Album] = []
     @State var importFiles: ImportFiles!
     @State var loading = false
-    @State var loaded = false
+    @State var isShowingImportSheet = false
     
     var albumsCount: Int {
         albums.count
@@ -70,12 +70,12 @@ struct AuthorizedView: View {
                 Text("\(albumsCount) album(s)")
                 Text("\(photosCount) photo(s)")
                 Spacer()
-                Button("Import") {
-                    print("Button tapped!")
-                    albums.forEach { album in
-                        album.importIntoPhotos()
-                    }
+                Button(action: { isShowingImportSheet.toggle() }) {
+                    Text("Import")
                 }.disabled(photosCount == 0)
+                    .sheet(isPresented: $isShowingImportSheet) {
+                        ImportView(isVisible: self.$isShowingImportSheet, albums: albums)
+                    }
             }
         }.padding()
     }
