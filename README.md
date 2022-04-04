@@ -45,5 +45,5 @@ I used the [jR Folder Publisher](http://regex.info/blog/lightroom-goodies/folder
 * Try the import with a small subset of photos first
 * I recommend ensuring that all your photos have sane dates in their EXIF/metadata or else they'll appear incorrectly in the time-based views in Photos. In my case I had a few albums with scanned photos which I ended up re-importing after I updated their EXIF data to be at least approcimately correct.
 * There's no deduping of photos at all. Running the import multiple times will results in duplicate images in Photos
-* Each photo will show “Saved from CustomPhotoImporter” in the detail view ![Image details in Photos.app](Images/SavedFromCustomPhotoImporter.png)
+* Each photo will show “Saved from CustomPhotoImporter” in the detail view: <br><img alt="Image details in Photos.app" src="Images/SavedFromCustomPhotoImporter.png" width="390px">
 * The imports aren't asynchronous so the app will appear to freeze while the import is happening
