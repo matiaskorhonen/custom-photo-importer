@@ -61,10 +61,6 @@ class ImportFiles {
                     albums[albumIndex].photos.append(Photo(basename: basename))
                 }
 
-                if !filename.contains("-edit") {
-                    albums[albumIndex].photos[index].originalURL = fileUrl
-                }
-
                 if fileExt.contains("dng") || fileExt.contains("nef") {
                     albums[albumIndex].photos[index].originalURL = fileUrl
                 } else {
